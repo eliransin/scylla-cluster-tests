@@ -22,7 +22,7 @@ SCYLLA_VERSION_RE = re.compile(r"\d+(\.\d+)?\.[\d\w]+([.~][\d\w]+)?")
 PRIMARY_XML_GZ_REGEX = re.compile(r'="(.*?primary.xml.gz)"')
 
 REPOMD_XML_PATH = "repodata/repomd.xml"
-SCYLLA_URL_REGEX = re.compile(".*(?P<url>http.*scylladb.com.*).*")
+SCYLLA_URL_REGEX = re.compile(".*(?P<url>http.*).*")
 
 SCYLLA_URL_RESPONSE_TIMEOUT = 30
 SUPPORTED_XML_EXTENSIONS = ("xml", "xml.gz")
