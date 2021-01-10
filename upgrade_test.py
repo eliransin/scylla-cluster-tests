@@ -528,6 +528,11 @@ class UpgradeTest(FillDatabaseData):
 
             self.log.info('Sleeping for 60s to let cassandra-stress start before the upgrade...')
             time.sleep(60)
+            for n in self.db_cluster.nodes:
+                found_error = n.search_system_log(search_pattern="Failed to update definitions",
+                                start_from_beginning=True)
+                if found_error:
+                    raise Exception("Reproducesd in: {}".format(step))
 
             step = 'Step2 - Upgrade Second Node '
             self.log.info(step)
@@ -551,12 +556,25 @@ class UpgradeTest(FillDatabaseData):
             self.log.info('Sleeping for 60s to let cassandra-stress start before the rollback...')
             time.sleep(60)
 
+            for n in self.db_cluster.nodes:
+                found_error = n.search_system_log(search_pattern="Failed to update definitions",
+                                start_from_beginning=True)
+                if found_error:
+                    raise Exception("Reproducesd in: {}".format(step))
+
             self.log.info('Step3 - Rollback Second Node ')
             # rollback second node
             self.log.info('Rollback Node %s begin', self.db_cluster.nodes[indexes[1]].name)
             self.rollback_node(self.db_cluster.nodes[indexes[1]])
             self.log.info('Rollback Node %s ended', self.db_cluster.nodes[indexes[1]].name)
             self.db_cluster.nodes[indexes[1]].check_node_health()
+            for n in self.db_cluster.nodes:
+                found_error = n.search_system_log(search_pattern="Failed to update definitions",
+                                start_from_beginning=True)
+                if found_error:
+                    raise Exception("Reproducesd in: {}".format(step))
+
+
 
         step = 'Step4 - Verify data during mixed cluster mode '
         self.log.info(step)
@@ -585,6 +603,13 @@ class UpgradeTest(FillDatabaseData):
                 self.fill_and_verify_db_data('after upgraded %s' % self.db_cluster.node_to_upgrade.name)
                 self.search_for_idx_token_error_after_upgrade(node=self.db_cluster.node_to_upgrade,
                                                               step=step)
+                for n in self.db_cluster.nodes:
+                    found_error = n.search_system_log(search_pattern="Failed to update definitions",
+                                    start_from_beginning=True)
+                    if found_error:
+                        raise Exception("Reproducesd in: {}".format(step))
+
+
 
         self.log.info('Step6 - Verify stress results after upgrade ')
         self.log.info('Waiting for stress threads to complete after upgrade')
