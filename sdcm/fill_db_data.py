@@ -875,37 +875,37 @@ class FillDatabaseData(ClusterTester):
             'min_version': '',
             'max_version': '',
             'skip': ''},
-        # table_options_test
-        {
-            'create_tables': ["""CREATE TABLE table_options_test (
-                                k int PRIMARY KEY,
-                                c int
-                            ) WITH comment = 'My comment'
-                               AND read_repair_chance = 0.5
-                               AND dclocal_read_repair_chance = 0.5
-                               AND gc_grace_seconds = 4
-                               AND bloom_filter_fp_chance = 0.01
-                               AND compaction = { 'class' : 'LeveledCompactionStrategy',
-                                                  'sstable_size_in_mb' : 10 }
-                               AND compression = { 'sstable_compression' : '' }
-                               AND caching = 'all'"""],
-            'truncates': ['TRUNCATE table_options_test'],
-            'inserts': [],
-            'queries': ["""
-                            ALTER TABLE table_options_test
-                            WITH comment = 'other comment'
-                             AND read_repair_chance = 0.3
-                             AND dclocal_read_repair_chance = 0.3
-                             AND gc_grace_seconds = 100
-                             AND bloom_filter_fp_chance = 0.1
-                             AND compaction = { 'class' : 'SizeTieredCompactionStrategy',
-                                                'min_sstable_size' : 42 }
-                             AND compression = { 'sstable_compression' : 'SnappyCompressor' }
-                        """],
-            'results': [[]],
-            'min_version': '',
-            'max_version': '',
-            'skip': ''},
+        # # table_options_test - disable alter test
+        # {
+        #     'create_tables': ["""CREATE TABLE table_options_test (
+        #                         k int PRIMARY KEY,
+        #                         c int
+        #                     ) WITH comment = 'My comment'
+        #                        AND read_repair_chance = 0.5
+        #                        AND dclocal_read_repair_chance = 0.5
+        #                        AND gc_grace_seconds = 4
+        #                        AND bloom_filter_fp_chance = 0.01
+        #                        AND compaction = { 'class' : 'LeveledCompactionStrategy',
+        #                                           'sstable_size_in_mb' : 10 }
+        #                        AND compression = { 'sstable_compression' : '' }
+        #                        AND caching = 'all'"""],
+        #     'truncates': ['TRUNCATE table_options_test'],
+        #     'inserts': [],
+        #     'queries': ["""
+        #                     ALTER TABLE table_options_test
+        #                     WITH comment = 'other comment'
+        #                      AND read_repair_chance = 0.3
+        #                      AND dclocal_read_repair_chance = 0.3
+        #                      AND gc_grace_seconds = 100
+        #                      AND bloom_filter_fp_chance = 0.1
+        #                      AND compaction = { 'class' : 'SizeTieredCompactionStrategy',
+        #                                         'min_sstable_size' : 42 }
+        #                      AND compression = { 'sstable_compression' : 'SnappyCompressor' }
+        #                 """],
+        #     'results': [[]],
+        #     'min_version': '',
+        #     'max_version': '',
+        #     'skip': ''},
         # timestamp_and_ttl_test
         {
             'create_tables': ["""CREATE TABLE timestamp_and_ttl_test(
